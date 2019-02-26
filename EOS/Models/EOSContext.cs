@@ -24,16 +24,7 @@ namespace EOS.Models
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Service> Service { get; set; }
         public virtual DbSet<ServiceType> ServiceType { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:excell-on.database.windows.net,1433;Initial Catalog=EoS;Persist Security Info=False;User ID=tuan123;Password=123@123a;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }
-        }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
@@ -41,8 +32,6 @@ namespace EOS.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Employee2Id).HasColumnName("Employee_2_Id");
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_Id");
 
@@ -52,9 +41,9 @@ namespace EOS.Models
 
                 entity.Property(e => e.Username).IsRequired();
 
-                entity.HasOne(d => d.Employee2)
+                entity.HasOne(d => d.Employee)
                     .WithMany(p => p.Account)
-                    .HasForeignKey(d => d.Employee2Id)
+                    .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Account_Employee");
 
